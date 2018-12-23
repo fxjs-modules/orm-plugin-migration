@@ -1,0 +1,55 @@
+{
+	"author": "Richard <richardo2016@gmail.com>",
+	"name": "@fxjs/orm-plugin-migration",
+	"version": "0.0.1",
+	"description": "migration plugin for orm",
+	"keywords": [
+		"sql",
+		"orm",
+		"mysql",
+		"sqlite"
+	],
+	"license": "MIT",
+	"repository": "http://github.com/fxjs-modules/orm-plugin-migration.git",
+	"main": "./lib/migrator",
+	"scripts": {
+		"build": "fib-typify src -o lib",
+		"test-sqlite": "cross-env ORM_PROTOCOL=sqlite npm run test",
+		"test": "fibjs test/run",
+		"ci": "npm run build && npm run test && npm run test-sqlite"
+	},
+	"engines": {
+		"fibjs": "*"
+	},
+	"analyse": false,
+	"dependencies": {
+		"@fibjs/mkdirp": "^1.0.1",
+		"path-parse": "^1.0.6"
+	},
+	"devDependencies": {
+		"@fibjs/ci": "^2.1.0",
+		"@fibjs/rmdirr": "^2.0.0",
+		"@fxjs/orm": "^1.8.1",
+		"@types/fibjs": "^0.26.5",
+		"async": "^2.6.1",
+		"bluebird": "^3.5.3",
+		"cross-env": "^5.2.0",
+		"fib-typify": "^0.5.0",
+		"lodash": "^4.17.11",
+		"shared-examples-for": "^0.1.3",
+		"should": "^13.2.3",
+		"sinon": "^7.2.2"
+	},
+	"ci": {
+		"type": "travis, appveyor",
+		"version": [
+			"0.21.0",
+			"0.22.0",
+			"0.23.0",
+			"0.24.0",
+			"0.25.0",
+			"0.26.0",
+			"0.26.1"
+		]
+	}
+}
