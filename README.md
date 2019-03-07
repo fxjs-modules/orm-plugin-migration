@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/@fxjs/orm-plugin-migration.svg)](https://www.npmjs.org/package/@fxjs/orm-plugin-migration)
 [![Build Status](https://travis-ci.org/fxjs-modules/orm-plugin-migration.svg)](https://travis-ci.org/fxjs-modules/orm-plugin-migration)
-[![Build status](https://ci.appveyor.com/api/projects/status/plarvl262d7279c3?svg=true)](https://ci.appveyor.com/project/richardo2016/orm-plugin-migration)
+[![Build status](https://ci.appveyor.com/api/projects/status/b0cwv5ashjvl08f8?svg=true)](https://ci.appveyor.com/project/richardo2016/orm-plugin-migration)
 
 ## Install
 
