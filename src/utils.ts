@@ -1,7 +1,9 @@
-const _       = require('lodash');
-const Promise = require('bluebird');
+import _       = require('lodash');
+import Promise = require('bluebird');
 
-export function addPromiseInterface(originalMethod) {
+export function addPromiseInterface(
+  originalMethod: <T = any>(callback: (err: any, result?: T) => void) => void
+) {
   return function() {
     const ctx = this;
 

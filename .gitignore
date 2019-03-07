@@ -8,3 +8,5 @@ lib
 *.db*
 
 test/config.js
+
+/migrations

@@ -6,7 +6,6 @@ var orm    = require('@fxjs/orm');
 var rmdirr = require('@fibjs/rmdirr');
 var async  = require('async');
 
-
 var aliases = {
   postgres: 'postgresql'
 };
@@ -79,9 +78,10 @@ module.exports = {
     var filePath = util.format(
       "%s/%s/%s", path.normalize(path.join(__dirname, '..')), task.dir, name
     );
+    console.log('filePath', filePath)
 
     // Because we have different migration files with the same path.
-    if (require.cache)
+    if (require.cache && require.cache.hasOwnProperty(filePath))
       delete require.cache[filePath];
 
     fs.writeFileSync(filePath, code);

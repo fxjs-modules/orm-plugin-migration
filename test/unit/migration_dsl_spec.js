@@ -146,7 +146,6 @@ shared.examplesFor('supporting Promise interface', function(opts) {
 });
 
 describe('MigrationDSL', function() {
-
   var dialect = fake.dialect();
   var driver = fake.driver(dialect);
   var dsl;
@@ -194,7 +193,7 @@ describe('MigrationDSL', function() {
     };
 
     beforeEach(function () {
-      sinon.stub(dsl, '_createColumn').callsFake(function ()  { return fake.object() });
+      sinon.stub(dsl, 'createColumn').callsFake(function ()  { return fake.object() });
     });
 
     shared.shouldBehaveLike('supporting callback interface',

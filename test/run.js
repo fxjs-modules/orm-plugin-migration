@@ -4,25 +4,24 @@ var helpers = require('./helpers');
 
 var configPath = path.normalize(path.join(__dirname, 'config.js'));
 
-
 if (!helpers.isTravis() && !fs.existsSync(configPath)) {
   console.error("test/config.js is missing. Take a look at test/config.example.js");
   process.exit(1);
 }
 
 function runTests() {
-  var test      = require('test');
+  var test = require('test');
   test.setup();
 
-  // require('./unit/migration_dsl_spec')
+  require('./unit/migration_dsl_spec')
 
-  // require('./integration/add_drop_column_spec')
-  // require('./integration/indexes_spec')
-  // require('./integration/primary_keys_spec')
-  // require('./integration/error_handling_spec')
-  // require('./integration/migration_spec')
-  // require('./integration/rename_column_spec')
-  // require('./integration/foreign_keys_spec')
+  require('./integration/add_drop_column_spec')
+  require('./integration/indexes_spec')
+  require('./integration/primary_keys_spec')
+  require('./integration/error_handling_spec')
+  require('./integration/migration_spec')
+  require('./integration/rename_column_spec')
+  require('./integration/foreign_keys_spec')
   require('./integration/migrator_spec')
 
   test.run(console.DEBUG)
