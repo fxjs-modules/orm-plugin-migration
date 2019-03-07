@@ -11,23 +11,26 @@ var aliases = {
 };
 
 var travisConfig = {
-  mysql: {
-    protocol : 'mysql',
-    user     : 'root',
-    password : '',
-    query    : { pool: true },
-    database : 'orm_migration_test',
-    host     : '127.0.0.1'
-  },
+  // mysql: {
+  //   protocol : 'mysql',
+  //   username : "root",
+  //   password : "",
+  //   query    : {},
+  //   database : 'test',
+  //   host     : '127.0.0.1',
+  //   port     : 3306
+  // },
+  mysql: "mysql://root:@127.0.0.1:3306/test",
   postgresql : {
     protocol : 'postgresql',
-    user     : 'postgres',
-    password : '',
-    query    : { pool: true },
-    database : 'orm_migration_test',
-    host     : '127.0.0.1'
+    user     : "postgres",
+    password : "",
+    query    : {},
+    database : 'test',
+    host     : '127.0.0.1',
+    port     : 5432
   },
-  sqlite     : 'sqlite:orm_migration_test.db',
+  sqlite     : 'sqlite:test.db',
 };
 
 module.exports = {
@@ -66,7 +69,7 @@ module.exports = {
     }
 
     // leaving this here for debugging.
-    // orm.settings.set("connection.debug", true);
+    process.env.DEBUG && orm.settings.set("connection.debug", true);
 
     orm.connect(config[protocol], function (err, connection) {
       if (err) return cb(err);
@@ -78,7 +81,6 @@ module.exports = {
     var filePath = util.format(
       "%s/%s/%s", path.normalize(path.join(__dirname, '..')), task.dir, name
     );
-    console.log('filePath', filePath)
 
     // Because we have different migration files with the same path.
     if (require.cache && require.cache.hasOwnProperty(filePath))

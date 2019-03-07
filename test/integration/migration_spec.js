@@ -1,6 +1,8 @@
 var should    = require('should');
 var _         = require('lodash');
 var async     = require('async');
+var coroutine     = require('coroutine');
+var util     = require('util');
 
 var helpers      = require('../helpers');
 var Task         = require('../../');
@@ -210,7 +212,12 @@ describe('Migration', function () {
       it('has migrated orm_migrations', function(done) {
         dsl.getColumns('orm_migrations', function(err, columns) {
           should.not.exist(err);
-          Object.keys(columns).should.have.length(1);
+          // https://stackoverflow.com/questions/8442147/how-to-delete-or-add-column-in-sqlite
+          if (helpers.protocol() === 'sqlite')
+            Object.keys(columns).should.have.length(3);
+          else
+            Object.keys(columns).should.have.length(1);
+
           done();
         });
       });

@@ -184,7 +184,7 @@ class MigrationDSL {
 
   execQuery <T = any>(
     query: string,
-    args: (string|number)[],
+    args: (string|number|Date|Class_Buffer|any)[],
     cb: FxOrmSqlDDLSync.ExecutionCallback<T>
   ) {
     this.driver.execQuery(query, args, cb);

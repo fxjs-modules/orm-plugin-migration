@@ -38,7 +38,7 @@ class Migration {
     this.dsl.execQuery('DELETE FROM orm_migrations WHERE migration LIKE ?;', [migration + '%'], cb);
   }
 
-  allV1 <T = any>(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
+  allV1 (cb: FxOrmSqlDDLSync.ExecutionCallback<FxOrmPlugin__Migration.MigrationTableRow[]>) {
     this.dsl.execQuery('SELECT migration, direction, created_at FROM orm_migrations ORDER BY created_at DESC;', [], function(err, results) {
       if(err) return cb(err);
       cb(null, results);
@@ -49,30 +49,33 @@ class Migration {
     var dsl = this.dsl;
     var self = this;
 
-    var createTable = function(cb) {
+    var createTable = function(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
       dsl.createTable('orm_migrations', { migration : { type : "text", required: true } }, cb);
     };
-    var createIndex = function(cb) {
+    var createIndex = function(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
       dsl.addIndex('unique_orm_migrations', { table: 'orm_migrations', columns: ['migration'] , unique: true }, cb);
     };
-    var updateTable = function(cb) {
+    var updateTable = function(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
       async.series([
         dsl.dropColumn.bind(dsl, 'orm_migrations', 'direction'),
         dsl.dropColumn.bind(dsl, 'orm_migrations', 'created_at')
       ], cb);
     };
-    var migrateData = function(cb) {
+    var migrateData = function(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
       // we do the following
       // 1. load all migrations
       // 2. create a list of migrations to delete
       // 3. delete them
       async.waterfall([
         self.allV1.bind(self),
-        function(migrations, cb) {
+        function(
+          migrations: FxOrmPlugin__Migration.MigrationTableRow[], 
+          cb: FxOrmSqlDDLSync.ExecutionCallback<T>
+        ) {
           var downMigrations = _.filter(migrations, {direction: 'down'});
           // for each down migration we can delete one matching up migration
           var toDelete = [];
-          _.each(downMigrations, function(down) {
+          _.each(downMigrations, function(down: FxOrmPlugin__Migration.MigrationTableRow) {
             toDelete.push(down);
             // first matchin up index
             var indexUp = _.findIndex(migrations, { direction: 'up', migration: down.migration });
@@ -80,8 +83,8 @@ class Migration {
           });
           cb(null, _.flatten(toDelete));
         },
-        function(toDelete, cb) {
-          var deleteOne = function(m, cb) {
+        function(toDelete: FxOrmPlugin__Migration.MigrationTableRow, cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
+          var deleteOne = function(m: FxOrmPlugin__Migration.MigrationTableRow, cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
             var query = 'DELETE FROM orm_migrations WHERE orm_migrations.migration = ? AND orm_migrations.created_at = ?';
             var params = [m.migration, m.created_at];
             dsl.execQuery(query, params, cb);

@@ -6,19 +6,20 @@
 // To run all drivers:
 // node test/run OR npm test
 
-exports.mysql = {
-  protocol : 'mysql',
-  user     : "root",
-  password : "",
-  query    : {},
-  database : 'test',
-  host     : '127.0.0.1',
-  port     : 3306
-};
+// exports.mysql = {
+//   protocol : 'mysql',
+//   user     : "root",
+//   password : "",
+//   query    : {},
+//   database : 'test',
+//   host     : '127.0.0.1',
+//   port     : 3306
+// };
+exports.mysql = "mysql://root:@127.0.0.1:3306/test"
 
 exports.postgresql = {
   protocol : 'postgresql',
-  user     : "postgres",
+  username : "postgres",
   password : "",
   query    : {},
   database : 'test',

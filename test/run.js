@@ -22,7 +22,11 @@ function runTests() {
   require('./integration/migration_spec')
   require('./integration/rename_column_spec')
   require('./integration/foreign_keys_spec')
-  require('./integration/migrator_spec')
+
+  if (helpers.protocol() !== 'sqlite')
+    require('./integration/migrator_spec')
+  // else
+  //   require('./integration/migrator_spec_sqlite')
 
   test.run(console.DEBUG)
   process.exit()

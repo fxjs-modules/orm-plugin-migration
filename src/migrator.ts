@@ -130,7 +130,6 @@ class Migrator {
       }
     }).sort().map(function(file) {
       var mod_path = path.join(process.cwd(), self.dir, file);
-      console.log('mod_path', mod_path, file);
       var mod = require(mod_path);
       return { file: file, up: mod.up, down: mod.down };
     });
