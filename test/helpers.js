@@ -16,7 +16,7 @@ var travisConfig = {
     user     : 'root',
     password : '',
     query    : { pool: true },
-    database : 'migrate_orm2_test',
+    database : 'orm_migration_test',
     host     : '127.0.0.1'
   },
   postgresql : {
@@ -24,10 +24,10 @@ var travisConfig = {
     user     : 'postgres',
     password : '',
     query    : { pool: true },
-    database : 'migrate_orm2_test',
+    database : 'orm_migration_test',
     host     : '127.0.0.1'
   },
-  sqlite     : 'sqlite:test.db'
+  sqlite     : 'sqlite:orm_migration_test.db',
 };
 
 module.exports = {
