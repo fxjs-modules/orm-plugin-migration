@@ -9,6 +9,7 @@ var Migrator       = require('./../../');
 var Promise    = require('bluebird');
 
 describe('Migrator', function() {
+
   var task;
   var conn;
   var cwd;

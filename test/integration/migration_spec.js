@@ -210,8 +210,7 @@ describe('Migration', function () {
       it('has migrated orm_migrations', function(done) {
         dsl.getColumns('orm_migrations', function(err, columns) {
           should.not.exist(err);
-          // Object.keys(columns).should.have.length(1);
-          Object.keys(columns).should.have.length(3);
+          Object.keys(columns).should.have.length(1);
           done();
         });
       });
