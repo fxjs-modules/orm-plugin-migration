@@ -81,7 +81,7 @@ exports.down = function (){
   return this.dropTable('test_table');
 };
 ```
-Both `createTable` and `dropTable`, along with other [MigrationDSL methods](lib/migration-dsl.js) return promises if callback is
+Both `createTable` and `dropTable`, along with other [MigrationDSL methods](src/migration-dsl.ts) return promises if callback is
 not specified. Look [here](examples/migrations) for more examples.
 
 Another example for adding or dropping a column:
@@ -230,5 +230,3 @@ ORM_PROTOCOL=mysql mocha test/integration
 Contributions are welcome. If you want to discuss or request a feature, please open an issue.
 
 We will ask for test coverage of Pull Requests for most issues. Please see the current testing strategy in test/integration.
-
-## Credits
