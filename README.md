@@ -88,7 +88,7 @@ Another example for adding or dropping a column:
 
 ```js
 exports.up = function(next){
-  this.addColumn('agency', preferredProvider: {type: "text", defaultValue: '1G', required: true}, next);
+  this.addColumn('agency', { preferredProvider: {type: "text", defaultValue: '1G', required: true} }, next);
 }
 
 exports.down = function(next){
