@@ -2,7 +2,7 @@ var should  = require('should');
 var helpers = require('../helpers');
 var Task    = require('./../../');
 
-describe('@fxjs/orm-plugin-migration- primary key DSL', function () {
+describe('@fxjs/orm_migration_test- primary key DSL', function () {
   var task;
   var conn;
 

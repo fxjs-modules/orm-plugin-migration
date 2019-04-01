@@ -20,13 +20,13 @@ var travisConfig = {
   //   host     : '127.0.0.1',
   //   port     : 3306
   // },
-  mysql: "mysql://root:@127.0.0.1:3306/orm-plugin-migration",
+  mysql: "mysql://root:@127.0.0.1:3306/orm_migration_test",
   // postgresql : {
   //   protocol : 'postgresql',
   //   user     : "postgres",
   //   password : "",
   //   query    : {},
-  //   database : 'orm-plugin-migration',
+  //   database : 'orm_migration_test',
   //   host     : '127.0.0.1',
   //   port     : 5432
   // },

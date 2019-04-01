@@ -15,14 +15,14 @@
 //   host     : '127.0.0.1',
 //   port     : 3306
 // };
-exports.mysql = "mysql://root:@127.0.0.1:3306/orm-plugin-migration"
+exports.mysql = "mysql://root:@127.0.0.1:3306/orm_migration_test"
 
 // exports.postgresql = {
 //   protocol : 'postgresql',
 //   username : "postgres",
 //   password : "",
 //   query    : {},
-//   database : 'orm-plugin-migration',
+//   database : 'orm_migration_test',
 //   host     : '127.0.0.1',
 //   port     : 5432
 // };
