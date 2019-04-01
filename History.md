@@ -1,7 +1,13 @@
 
-v0.0.1 / 2019-04-01
+v0.0.2 / 2019-04-01
 ==================
 
+  * typo fix, support absolute path as Migrator's dir.
+
+v0.0.1 / 2019-04-01
+===================
+
+  * Release v0.0.1
   * fix README.md
   * remove unnecessary lodash.
   * update README.md

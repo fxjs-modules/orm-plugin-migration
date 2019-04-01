@@ -1,7 +1,7 @@
 {
 	"author": "Richard <richardo2016@gmail.com>",
 	"name": "@fxjs/orm-plugin-migration",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"types": "@types/index.d.ts",
 	"description": "migration plugin for orm",
 	"keywords": [
