@@ -14,6 +14,13 @@ declare namespace FxOrmPlugin__MigrationDSL {
     }
 
     interface Options__addForeignKey {
+        [k: string]: any
+    }
 
+    class MigrationDSL {
+        driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>
+        Dialect: FxOrmSqlDDLSync__Dialect.Dialect
+
+        [k: string]: any
     }
 }

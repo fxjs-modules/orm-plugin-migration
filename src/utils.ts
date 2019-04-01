@@ -1,3 +1,4 @@
+import path       = require('path');
 import util       = require('util');
 import Promise = require('bluebird');
 
@@ -14,4 +15,11 @@ export function addPromiseInterface(
       return Promise.promisify(originalMethod).apply(ctx, arguments);
     }
   }
+}
+
+export function prependIfNotAbsPath (fileordirname: string = '', prefix: string = '') {
+  if (path.isAbsolute(fileordirname))
+    return fileordirname
+
+  return path.join(prefix, fileordirname)
 }

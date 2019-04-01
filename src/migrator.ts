@@ -10,7 +10,7 @@ import mkdirp             = require('@fibjs/mkdirp');
 
 import Migration          = require('./migration');
 import MigrationDsl       = require('./migration-dsl');
-import { addPromiseInterface } from './utils';
+import { addPromiseInterface, prependIfNotAbsPath } from './utils';
 
 /**
  * Log a keyed message.
@@ -67,29 +67,33 @@ var coffeeTemplate = [
 function generate(name: string, extension: string) {
   var template = ((extension === "js") ? jsTemplate : coffeeTemplate) as string | Class_Buffer;
   var filePath = name + '.' + extension;
-  log('create', path.join(this.process.cwd(), filePath));
+  log('create', prependIfNotAbsPath(filePath, process.cwd()));
   fs.writeFile(filePath, template as Class_Buffer);
 }
 
-class Migrator {
+class Migrator implements FxOrmPlugin__Migrator.Migrator {
   driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>
   dir: string
   coffee: boolean
   logger: Function
-  dsl: MigrationDsl
-  migration: Migration
+  
+  dsl?: MigrationDsl
+  migration?: Migration
 
   constructor (
     driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>,
-    opts: FxOrmPlugin__Migrator.MigratorConstructorOptions
+    opts?: FxOrmPlugin__Migrator.MigratorConstructorOptions
   ) {
     opts                  = (opts || {});
     this.driver           = driver;
     this.dir              = (opts.dir || 'migrations');
     this.coffee           = (opts.coffee || false);
     this.logger           = (opts.logger || log);
-    this.dsl              = new MigrationDsl(this.driver);
-    this.migration        = new Migration(this.dsl, this.logger);
+
+    if (this.driver) {
+      this.dsl              = new MigrationDsl(this.driver);
+      this.migration        = new Migration(this.dsl, this.logger);
+    }
   }
 
   /**
@@ -130,7 +134,8 @@ class Migrator {
         return file.match(/^\d+.*\.js$/);
       }
     }).sort().map(function(file) {
-      var mod_path = path.join(process.cwd(), self.dir, file);
+      const basedir = prependIfNotAbsPath(self.dir, process.cwd());
+      var mod_path = path.join(basedir, file);
       var mod = require(mod_path);
       return { file: file, up: mod.up, down: mod.down };
     });
@@ -142,7 +147,11 @@ class Migrator {
    * @param {Number} direction
    */
 
-  performMigration (direction, migrationName, cb) {
+  performMigration (
+    direction: FxOrmPlugin__Migration.MigrationTableRow['direction'],
+    migrationName: string,
+    cb: FxOrmSqlDDLSync.ExecutionCallback<any>
+  ) {
     var self = this;
     var fileName: string;
 
@@ -221,9 +230,9 @@ class Migrator {
    * up [name]
    * @promise
    */
-  up (migrationName, cb) {
+  up <T = any>(migrationName: string, cb?: FxOrmSqlDDLSync.ExecutionCallback<any>): void | PromiseLike<T> | any {
     var self = this;
-    this.setup(function(err) {
+    this.setup(function(err: Error) {
       if (err) return cb(err);
       self.performMigration('up', migrationName, cb);
     });
@@ -235,9 +244,9 @@ class Migrator {
    * @promise
    */
 
-  down (migrationName, cb) {
+  down <T = any>(migrationName: string, cb?: FxOrmSqlDDLSync.ExecutionCallback<any>): void | PromiseLike<T> | any {
     var self = this;
-    this.setup(function(err) {
+    this.setup(function(err: Error) {
       if(err) return cb(err);
       self.performMigration('down', migrationName, cb);
     });
@@ -248,7 +257,7 @@ class Migrator {
    * @promise
    */
 
-  generate (title, cb) {
+  generate <T = any>(title: string, cb?: FxOrmSqlDDLSync.ExecutionCallback<any>): void | PromiseLike<T> | any {
     var self = this;
     this.mkdir(function(){
       // var migrations = fs.readdirSync(self.dir).filter(function(file) {
@@ -268,7 +277,7 @@ class Migrator {
     })
   };
 
-  ensureMigrationsTable (cb) {
+  ensureMigrationsTable <T = any>(cb?: FxOrmSqlDDLSync.ExecutionCallback<any>): void | PromiseLike<T> | any {
     this.migration.ensureMigrationsTable(cb);
   };
 }

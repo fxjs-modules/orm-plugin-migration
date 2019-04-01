@@ -4,11 +4,8 @@
 
 /// <reference path="dsl.d.ts" />
 /// <reference path="migrator.d.ts" />
+/// <reference path="migration.d.ts" />
 
-declare namespace FxOrmPlugin__Migration {
-    interface MigrationTableRow {
-        migration: string
-        direction: 'up' | 'down'
-        created_at: Date
-    }
+declare module "@fxjs/orm-plugin-migration" {
+    export = FxOrmPlugin__Migrator.Migrator
 }

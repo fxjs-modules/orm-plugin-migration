@@ -9,8 +9,8 @@ var getColumnMetadata = function(property: FxOrmSqlDDLSync__Column.Property): ""
 };
 
 // duplicated from sql-ddl-sync Sync closure
-class MigrationDSL {
-  driver: any
+class MigrationDSL implements FxOrmPlugin__MigrationDSL.MigrationDSL {
+  driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>
   Dialect: FxOrmSqlDDLSync__Dialect.Dialect
   
   constructor (driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>) {

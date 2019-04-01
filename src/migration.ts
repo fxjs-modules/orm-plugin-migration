@@ -2,7 +2,7 @@ import async = require('async');
 import MigrationDsl from './migration-dsl';
 
 function noOp () {};
-class Migration {
+class Migration implements FxOrmPlugin__Migration.Migration {
   log: Function
   dsl: MigrationDsl
 
@@ -55,7 +55,7 @@ class Migration {
       dsl.addIndex('unique_orm_migrations', { table: 'orm_migrations', columns: ['migration'] , unique: true }, cb);
     };
     var updateTable = function(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
-      async.series([
+      async.series.call(null, [
         dsl.dropColumn.bind(dsl, 'orm_migrations', 'direction'),
         dsl.dropColumn.bind(dsl, 'orm_migrations', 'created_at')
       ], cb);
@@ -73,7 +73,7 @@ class Migration {
         ) {
           var downMigrations = migrations.filter(x => x.direction === 'down');
           // for each down migration we can delete one matching up migration
-          var toDelete = [];
+          var toDelete: FxOrmPlugin__Migration.MigrationTableRow[] = [];
           downMigrations.forEach(function(down: FxOrmPlugin__Migration.MigrationTableRow) {
             toDelete.push(down);
             // first matchin up index
@@ -84,7 +84,7 @@ class Migration {
           });
           cb(null, toDelete);
         },
-        function(toDelete: FxOrmPlugin__Migration.MigrationTableRow, cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
+        function(toDelete: FxOrmPlugin__Migration.MigrationTableRow[], cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
           var deleteOne = function(m: FxOrmPlugin__Migration.MigrationTableRow, cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
             var query = 'DELETE FROM orm_migrations WHERE orm_migrations.migration = ? AND orm_migrations.created_at = ?';
             var params = [m.migration, m.created_at];
@@ -102,14 +102,14 @@ class Migration {
           if (err) return cb(err);
           if (Object.keys(columns).length > 1) {                        // v1 ( multi columns ) -> migrate to v2
             self.log('init', 'Migrations table is v1, changing to v2');
-            async.series([migrateData, updateTable, createIndex], cb);
+            async.series.call(null, [migrateData, updateTable, createIndex], cb);
           } else {                                                      // v2 -> nothing to do
             cb();
           }
         });
       } else {                                                          // no migrations table -> create it
         self.log('init', 'No migrations table, creating one');
-        async.series([createTable, createIndex], cb);
+        async.series.call(null, [createTable, createIndex], cb);
       }
     });
   }
