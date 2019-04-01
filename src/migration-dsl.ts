@@ -14,7 +14,7 @@ class MigrationDSL {
   driver: any
   Dialect: FxOrmSqlDDLSync__Dialect.Dialect
   
-  constructor (driver: FxOrmSqlDDLSync__Driver.Driver) {
+  constructor (driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>) {
     this.driver           = driver;
     this.Dialect          = SqlDDLSync.dialect(driver.dialect);
     this.Dialect.escapeId = driver.query.escapeId;
@@ -33,7 +33,7 @@ class MigrationDSL {
     name: string,
     property: FxOrmSqlDDLSync__Column.Property,
     Dialect: FxOrmSqlDDLSync__Dialect.Dialect,
-    driver: FxOrmSqlDDLSync__Driver.Driver
+    driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>
   ): false | FxOrmSqlDDLSync__Column.OpResult__CreateColumn {
     var type =  Dialect.getType(collection, property, driver);
 
@@ -56,21 +56,21 @@ class MigrationDSL {
   // duplicated and altered from sql-ddl-sync Sync closure
   createTable <T = any> (
     collectionName: string,
-    options: FxOrmPlugin__MigrationDSL.Options__createTable,
+    properties: FxOrmPlugin__MigrationDSL.Properties__createTable,
     cb: FxOrmSqlDDLSync.ExecutionCallback<T>
   ) {
     const columns = [];
     let keys = [];
 
-    for (let k in options) {
-      const col = this.createColumn(collectionName, k, options[k], this.Dialect, this.driver);
+    for (let k in properties) {
+      const col = this.createColumn(collectionName, k, properties[k], this.Dialect, this.driver);
 
       if (col === false) {
         return cb(new Error("Unknown type for property '" + k + "'"));
       }
 
       // `primary` is deprecated in favour of `key`
-      if (options[k].key || options[k].primary) {
+      if (properties[k].key || properties[k].primary) {
         keys.push(k);
       }
 
@@ -86,11 +86,11 @@ class MigrationDSL {
 
   addColumn <T = any>(
     collectionName: FxOrmSqlDDLSync.TableName,
-    options: FxOrmPlugin__MigrationDSL.Options__addColumn,
+    properties: FxOrmPlugin__MigrationDSL.Properties__addColumn,
     cb: FxOrmSqlDDLSync.ExecutionCallback<T>
   ) {
-    var columnName = _.keys(options)[0]
-    var column = this.createColumn(collectionName, columnName, options[columnName], this.Dialect, this.driver);
+    var columnName = _.keys(properties)[0]
+    var column = this.createColumn(collectionName, columnName, properties[columnName], this.Dialect, this.driver);
     
     if (column)
       this.Dialect.addCollectionColumn(this.driver, collectionName, column.value, null, cb);

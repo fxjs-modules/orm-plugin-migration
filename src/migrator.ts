@@ -71,7 +71,7 @@ function generate(name: string, extension: string) {
 }
 
 class Migrator {
-  driver: FxOrmSqlDDLSync__Driver.Driver
+  driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>
   dir: string
   coffee: boolean
   logger: Function
@@ -79,7 +79,7 @@ class Migrator {
   migration: Migration
 
   constructor (
-    driver: FxOrmSqlDDLSync__Driver.Driver,
+    driver: FxOrmSqlDDLSync__Driver.Driver<FxSqlQuery.Class_Query>,
     opts: FxOrmPlugin__Migrator.MigratorConstructorOptions
   ) {
     opts                  = (opts || {});

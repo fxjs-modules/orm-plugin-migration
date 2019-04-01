@@ -1,10 +1,10 @@
 declare namespace FxOrmPlugin__MigrationDSL {
-    interface Options__createTable {
-
+    interface Properties__createTable {
+        [k: string]: FxOrmSqlDDLSync__Column.Property
     }
 
-    interface Options__addColumn {
-
+    interface Properties__addColumn {
+        [k: string]: FxOrmSqlDDLSync__Column.Property
     }
 
     interface Options__addIndex {
