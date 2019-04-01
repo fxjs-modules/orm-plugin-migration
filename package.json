@@ -27,17 +27,19 @@
 	"dependencies": {
 		"@fibjs/mkdirp": "^1.0.1",
 		"@fxjs/sql-ddl-sync": "^0.3.8",
+		"@types/async": "^2.4.1",
+		"@types/bluebird": "^3.5.26",
+		"@types/path-parse": "^1.0.19",
+		"async": "^2.6.2",
+		"bluebird": "^3.5.3",
 		"path-parse": "^1.0.6"
 	},
 	"devDependencies": {
 		"@fibjs/ci": "^2.2.0",
 		"@fibjs/rmdirr": "^2.0.0",
 		"@fxjs/orm": "^1.9.4",
-		"@types/bluebird": "^3.5.26",
 		"@types/fibjs": "^0.26.5",
 		"@types/lodash": "^4.14.123",
-		"async": "^2.6.2",
-		"bluebird": "^3.5.3",
 		"cross-env": "^5.2.0",
 		"fib-typify": "^0.5.2",
 		"lodash": "^4.17.11",

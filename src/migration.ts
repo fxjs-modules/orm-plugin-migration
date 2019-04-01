@@ -1,5 +1,4 @@
-const _     = require("lodash");
-const async = require('async');
+import async = require('async');
 import MigrationDsl from './migration-dsl';
 
 function noOp () {};
@@ -23,10 +22,10 @@ class Migration {
     });
   }
 
-  all <T = any>(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
+  all <T = string[]>(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
     this.dsl.execQuery('SELECT migration FROM orm_migrations ORDER BY migration DESC;', [], function(err, results) {
       if(err) return cb(err);
-      cb(null, _.map(results, 'migration'));
+      cb(null, (results || []).map((x: {migration: string}) => x.migration));
     });
   }
 
@@ -62,7 +61,7 @@ class Migration {
       ], cb);
     };
     var migrateData = function(cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
-      // we do the following
+      // we do the following:
       // 1. load all migrations
       // 2. create a list of migrations to delete
       // 3. delete them
@@ -70,18 +69,20 @@ class Migration {
         self.allV1.bind(self),
         function(
           migrations: FxOrmPlugin__Migration.MigrationTableRow[], 
-          cb: FxOrmSqlDDLSync.ExecutionCallback<T>
+          cb: FxOrmSqlDDLSync.ExecutionCallback<any[]>
         ) {
-          var downMigrations = _.filter(migrations, {direction: 'down'});
+          var downMigrations = migrations.filter(x => x.direction === 'down');
           // for each down migration we can delete one matching up migration
           var toDelete = [];
-          _.each(downMigrations, function(down: FxOrmPlugin__Migration.MigrationTableRow) {
+          downMigrations.forEach(function(down: FxOrmPlugin__Migration.MigrationTableRow) {
             toDelete.push(down);
             // first matchin up index
-            var indexUp = _.findIndex(migrations, { direction: 'up', migration: down.migration });
-            toDelete.push(migrations.splice(indexUp, 1));
+            var indexUp = migrations.findIndex(x => {
+              return x.direction === 'up' && x.migration === down.migration
+            });
+            toDelete = toDelete.concat(migrations.splice(indexUp, 1));
           });
-          cb(null, _.flatten(toDelete));
+          cb(null, toDelete);
         },
         function(toDelete: FxOrmPlugin__Migration.MigrationTableRow, cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {
           var deleteOne = function(m: FxOrmPlugin__Migration.MigrationTableRow, cb: FxOrmSqlDDLSync.ExecutionCallback<T>) {

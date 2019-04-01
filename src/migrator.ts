@@ -1,8 +1,9 @@
 /// <reference lib="es6" />
 
-const _                  = require("lodash");
 import fs                 = require('fs');
 import path               = require('path');
+import util               = require('util');
+
 import pathParse          = require('path-parse');
 import async              = require('async');
 import mkdirp             = require('@fibjs/mkdirp');
@@ -118,7 +119,7 @@ class Migrator {
    * Load migrations modules from the file system.
    */
 
-  loadModules () {
+  loadModules (): FxOrmPlugin__Migrator.MigratorModule[] {
     var self = this;
     // return fs.readdirSync(this.dir).filter(function(file) {
     return fs.readdir(this.dir).filter(function(file) {
@@ -158,29 +159,31 @@ class Migrator {
       if(direction === 'down') migrationModules.reverse();
 
       // determine cut off point for a given migrationName
-      var cutOff = _.findIndex(migrationModules, { file: migrationName });
+      var cutOff = migrationModules.findIndex(x => x.file === migrationName);
       if(cutOff > -1) {
         migrationModules = migrationModules.slice(0, cutOff + 1);
       }
 
       // is a migration module applied ?
-      var isApplied = function(mod) {
-        fileName = pathParse(mod.file).name;
-        var res = _.some(appliedMigrations, function(appliedMigration) {
-          return appliedMigration.match(fileName);
-        });
-        return res;
+      var isApplied = function(isMatch: boolean) {
+        return (mod: FxOrmPlugin__Migrator.MigratorModule) => {
+          fileName = pathParse(mod.file).name;
+          const res = appliedMigrations.some(function (appliedMigration) {
+            return !!appliedMigration.match(fileName);
+          });
+          return isMatch ? res : !res;
+        }
       }
       if(direction === 'up') { // up -> reject the applied migrations
-        migrationModules = _.reject(migrationModules, isApplied);
+        migrationModules = migrationModules.filter(isApplied(false));
       } else {                 // down -> we only do the applied one
-        migrationModules = _.filter(migrationModules, isApplied);
+        migrationModules = migrationModules.filter(isApplied(true));
         // down migration without parameter -> rollback only the first one
-        if(_.isEmpty(migrationName)) migrationModules = [ _.head(migrationModules) ];
+        if(util.isEmpty(migrationName)) migrationModules = [ util.first(migrationModules) ];
       }
 
-      var migrationCalls = _.map(migrationModules, function(mod) {
-        return function(done) {
+      var migrationCalls = migrationModules.map(function(mod) {
+        return function(done: FxOrmSqlDDLSync.ExecutionCallback<string>) {
           self.logger(direction, mod.file);
           // call the up/down function, using dsl as 'this'
 

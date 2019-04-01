@@ -1,4 +1,4 @@
-import _       = require('lodash');
+import util       = require('util');
 import Promise = require('bluebird');
 
 export function addPromiseInterface(
@@ -7,7 +7,7 @@ export function addPromiseInterface(
   return function() {
     const ctx = this;
 
-    const cb = _.last(arguments);
+    const cb = util.last(Array.prototype.slice.call(arguments || [], 0));
     if(typeof cb === "function") {
       return originalMethod.apply(ctx, arguments);
     } else {

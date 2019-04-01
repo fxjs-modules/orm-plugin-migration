@@ -1,6 +1,5 @@
 /// <reference path="../@types/index.d.ts" />
 
-import _  = require("lodash");
 import SqlDDLSync = require("@fxjs/sql-ddl-sync")
 import { addPromiseInterface } from "./utils";
 //lets you attach further metadata to column definition
@@ -89,7 +88,7 @@ class MigrationDSL {
     properties: FxOrmPlugin__MigrationDSL.Properties__addColumn,
     cb: FxOrmSqlDDLSync.ExecutionCallback<T>
   ) {
-    var columnName = _.keys(properties)[0]
+    var columnName = Object.keys(properties)[0]
     var column = this.createColumn(collectionName, columnName, properties[columnName], this.Dialect, this.driver);
     
     if (column)

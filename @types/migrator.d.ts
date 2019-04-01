@@ -4,4 +4,10 @@ declare namespace FxOrmPlugin__Migrator {
         coffee?: boolean
         logger?: Function
     }
+
+    interface MigratorModule {
+        file: string
+        up: Function
+        down: Function
+    }
 }
