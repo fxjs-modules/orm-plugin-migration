@@ -20,16 +20,16 @@ var travisConfig = {
   //   host     : '127.0.0.1',
   //   port     : 3306
   // },
-  mysql: "mysql://root:@127.0.0.1:3306/test",
-  postgresql : {
-    protocol : 'postgresql',
-    user     : "postgres",
-    password : "",
-    query    : {},
-    database : 'test',
-    host     : '127.0.0.1',
-    port     : 5432
-  },
+  mysql: "mysql://root:@127.0.0.1:3306/orm-plugin-migration",
+  // postgresql : {
+  //   protocol : 'postgresql',
+  //   user     : "postgres",
+  //   password : "",
+  //   query    : {},
+  //   database : 'orm-plugin-migration',
+  //   host     : '127.0.0.1',
+  //   port     : 5432
+  // },
   sqlite     : 'sqlite:test.db',
 };
 
