@@ -27,7 +27,7 @@ The example below uses MySQL. Locomote uses @fxjs/orm-plugin-migration with Post
 Build a connection & construct the @fxjs/orm-plugin-migration Task object:
 
 ```js
-var orm         = require('orm');
+var orm         = require('@fxjs/orm');
 var MigrateTask = require('@fxjs/orm-plugin-migration');
 
 orm.connect(connectionString, function (err, connection) {
@@ -77,7 +77,7 @@ exports.up = function () {
   });
 };
 
-exports.down = function (){
+exports.down = function () {
   return this.dropTable('test_table');
 };
 ```
