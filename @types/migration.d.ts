@@ -1,3 +1,5 @@
+/// <reference path="dsl.d.ts" />
+
 declare namespace FxOrmPlugin__Migration {
     interface MigrationTableRow {
         migration: string
